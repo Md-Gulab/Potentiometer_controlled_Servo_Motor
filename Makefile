@@ -29,6 +29,18 @@ build/%.o: src/%.s | build
 build:
 	mkdir build
 
+openocd: openocd.cfg	
+	openocd -f openocd.cfg
+
+gdb: build/main.elf gdbinit
+	arm-none-eabi-gdb -x gdbinit build/main.elf
+
+gdbcom:
+	target extended-remote localhost:3333
+	monitor reset halt
+	load
+	break main		
+
 -include $(OBJS:.o=.d)
 
 clean: build
