@@ -1,8 +1,3 @@
-This is the initial configuration of project, where i made all the files and folders 
-And copied the library folders and did all the configuration settings.
-Wrote the following functions
-    config.h
-    gpio.h
-    gpio.c
-    main.c
-    Makefile
+In this version i have added pwm.c and pwm.h and tested it through a crude while(1) loop
+the servo is moving in three position : min, max, centre.
+

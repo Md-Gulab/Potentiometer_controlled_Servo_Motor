@@ -35,6 +35,9 @@ openocd: openocd.cfg
 gdb: build/main.elf gdbinit
 	arm-none-eabi-gdb -x gdbinit build/main.elf
 
+flash: all
+	openocd -f openocd.cfg -c "program build/main.elf verify reset exit"	
+
 gdbcom:
 	target extended-remote localhost:3333
 	monitor reset halt
