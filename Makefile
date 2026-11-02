@@ -31,7 +31,20 @@ build:
 
 openocd: openocd.cfg	
 	openocd -f openocd.cfg
+#---------------------------------------------------------------------------------------
+#test targets and recipes
+UNITY_DIR = tests/unity/src
+.PHONY: test test_map test_filter
+test: test_map test_filter
 
+test_map: tests/testFiles/MAP_test.c src/map.c | build
+	gcc -Iinc -I$(UNITY_DIR) tests/testFiles/MAP_test.c src/map.c $(UNITY_DIR)/unity.c -o build/MAP_test.exe
+	./build/MAP_test.exe
+
+test_filter: tests/testFiles/FILTER_test.c src/filter.c | build
+	gcc -Iinc -I$(UNITY_DIR) tests/testFiles/FILTER_test.c src/filter.c $(UNITY_DIR)/unity.c -o build/FILTER_test.exe
+	./build/FILTER_test.exe	
+#----------------------------------------------------------------------------------------
 gdb: build/main.elf gdbinit
 	arm-none-eabi-gdb -x gdbinit build/main.elf
 
