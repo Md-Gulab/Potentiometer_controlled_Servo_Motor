@@ -1,19 +1,24 @@
 #include <stdint.h>
 
-#include "app.h"
+#include "stm32f4xx.h"      // for __WFI() 
 
-/* Crude busy-wait, roughly 1 ms per call at 16 MHz and -O0.
- - It is replaced by the TIM6 100 Hz tick in the next step. */
-static void delay_crude_ms(uint32_t ms){
-    for (volatile uint32_t i = 0U; i < ms * 2000U; i++) {
-    }
-}
+#include "app.h"
+#include "config.h"
+#include "tick.h"
+
+#ifndef LOOP_HZ
+#define LOOP_HZ     100U
+#endif
 
 int main(void){
     app_init();
+    tick_init(LOOP_HZ);
 
     while (1) {
+        // Sleep until the next tick, then run exactly one control step
+        while (!tick_consume()) {
+            __WFI();
+        }
         app_step();
-        delay_crude_ms(10U);    /* ~100 Hz control loop */
     }
 }
